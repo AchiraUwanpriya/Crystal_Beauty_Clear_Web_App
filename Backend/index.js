@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import Student from './models/student.js';
 
 const app =  express();
 
@@ -21,13 +22,7 @@ mongoose.connect(connectionString).then(
 }
 )
 
-const studentSchema = new mongoose.Schema({
-    name: String,
-    age: Number,
-    city:String,
-})
 
-const Student = mongoose.model('Student', studentSchema)
 
 app.get("/",
     (req,res)=>{
