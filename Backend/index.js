@@ -1,12 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import Student from './models/student.js';
+import studentRouter from './routers/studentRouter.js';
 
 const app =  express();
 
-// function success(){
-//     console.log('Server is Started');
-// }
+app.use("/students", studentRouter)
 
 // middleware to parse JSON bodies
 app.use(express.json());
@@ -24,60 +22,7 @@ mongoose.connect(connectionString).then(
 
 
 
-app.get("/",
-    (req,res)=>{
-        console.log(req.body);
-        console.log("get request received")
-
-        let prefix = "Mr"
-        if(req.body.gander =="Female" ){
-            prefix = "Ms";
-        }
-
-
-        res.json({
-            message: "Hello " + prefix + " " + req.body.name,
-        }
-    );
-    }
-)
-
-app.post("/",
-    (req,res)=>{
-        
-        const student = new Student(
-            {
-                name: req.body.name,
-                age: req.body.age,
-                city: req.body.city
-            }
-        )
-        student.save().then(
-            () =>{
-                res.json({
-                    message: "Student Created Successfully",
-                    student: student
-                });
-            }
-
-        ).catch(
-            ()=>{
-                res.json({
-                    message: "Student Creation Failed",
-                });
-            }
-
-
-        )
-    }
-)
-
-app.delete("/",
-    ()=>{
-        console.log("delete request received");
-    }
-)
-
+// Start the server
 app.listen(5000, 
     () => {
         console.log('Server is Started')
