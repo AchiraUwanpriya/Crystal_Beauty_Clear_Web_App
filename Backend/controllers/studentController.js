@@ -20,8 +20,21 @@ export function getStudents(req,res){
     }
 
 export function createStudent(req,res)
-{
-        
+{   // Check if the user is authenticated
+        if (req.user == null){
+            res.status(401).json({
+                message: "Please Login and try again"
+            })
+            return
+        }
+
+        if(req.user.role != "admin"){
+            res.status(403).json({
+                message: "You must be an admin to create a student"
+            })
+            return
+        }
+
         const student = new Student(
             {
                 name: req.body.name,
@@ -39,7 +52,7 @@ export function createStudent(req,res)
 
         ).catch(
             ()=>{
-                res.json({
+                res.status(401).json({
                     message: "Student Creation Failed",
                 });
             }
