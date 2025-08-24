@@ -3,8 +3,15 @@ import mongoose from "mongoose";
 import userRouter from "./routers/userRouter.js";
 import jwt from "jsonwebtoken";
 import productRouter from "./routers/productRouter.js";
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
+
+// middleware to enable CORS
+app.use(cors());
 
 // middleware to parse JSON bodies
 app.use(express.json());
@@ -15,7 +22,7 @@ app.use((req, res, next) => {
 
   if (token != null) {
     token = token.replace("Bearer ", "");
-    jwt.verify(token, "jwt-secret", (err, dicoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, dicoded) => {
       if (dicoded == null) {
         res.json({
           message: "Invalid Token Please Login Again",
@@ -29,20 +36,19 @@ app.use((req, res, next) => {
   next();
 });
 
-const connectionString =
-  "mongodb+srv://achirauwanpriya:Gnab3412@cluster0.0wepwcu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const connectionString = process.env.MONGO_URI;
 
 mongoose
   .connect(connectionString)
   .then(() => {
-    console.log("Database Connected");
+    console.log("Database Connected Successfully");
   })
   .catch(() => {
     console.error("Database Connection Failed");
   });
 
-app.use("/users", userRouter);
-app.use("/products", productRouter);
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 // Start the server
 app.listen(5000, () => {

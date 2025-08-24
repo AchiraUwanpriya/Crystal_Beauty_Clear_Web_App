@@ -4,9 +4,9 @@ import Header from "../src/components/header";
 export default function HomePage(){
     return(
 
-        <div className="w-full h-full bg bg-primary">
+        <div className="w-full h-full bg-red-100">
             <Header/>
-            <Routes>
+            <Routes path="/">
                 <Route path="/" element={<h1>Home Page</h1>} />
                 <Route path="/products" element={<h1>Products Page</h1>} />
                 <Route path="/about" element={<h1>About Page</h1>} />
