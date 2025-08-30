@@ -5,6 +5,7 @@ import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import { Link, Route, Routes } from "react-router-dom";
 import AdminProductPage from "./admin/adminProductPage";
 import AdminAddNewProducts from "./admin/adminAddNewProducts";
+import UpdateProductPage from "./admin/adminUpdateProducts";
 
 export default function AdminPage() {
   return (
@@ -54,6 +55,7 @@ export default function AdminPage() {
             <Route path="/products" element={<AdminProductPage />} />
             <Route path="/orders" element={<h1>Orders</h1>} />
             <Route path="/add-product" element={<AdminAddNewProducts />} />
+            <Route path="/update-product/" element={<UpdateProductPage />} />
           </Routes>
         </div>
       </div>

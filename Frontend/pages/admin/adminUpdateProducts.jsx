@@ -1,23 +1,24 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import mediaUpload from "../../src/utils/mediaUpload";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function AdminAddNewProducts() {
-  const [productId, setProductId] = useState("");
-  const [name, setName] = useState("");
-  const [altnames, setAltNames] = useState("");
-  const [description, setDescription] = useState("");
+export default function UpdateProductPage() {
+  const location = useLocation();
+  const [productId, setProductId] = useState(location.state.productID);
+  const [name, setName] = useState(location.state.productName);
+  const [altnames, setAltNames] = useState(location.state.altNames.join(", "));
+  const [description, setDescription] = useState(location.state.description);
   const [images, setImages] = useState([]);
-  const [price, setPrice] = useState("0");
-  const [labelledPrice, setLabelledPrice] = useState("0");
-  const [category, setCategory] = useState("");
-  const [stock, setStock] = useState("0");
+  const [price, setPrice] = useState(location.state.price);
+  const [labelledPrice, setLabelledPrice] = useState(location.state.labelledPrice);
+  const [category, setCategory] = useState(location.state.category);
+  const [stock, setStock] = useState(location.state.stock);
   const navigate = useNavigate();
 
 
-async function addProduct() {
+async function updateProduct() {
 
   const token = localStorage.getItem("token");
 
@@ -34,7 +35,12 @@ async function addProduct() {
 
   try{
 
-const urls = await Promise.all(promises)
+let urls = await Promise.all(promises);
+
+if (urls.length == 0){
+    urls = location.state.images;
+}
+
 const allternativeNames = altnames.split(",");
 
 const product ={
@@ -49,17 +55,17 @@ const product ={
   stock : stock
 }
 
-await axios.post(import.meta.env.VITE_API_URL + "/api/products", product, {
+await axios.put(import.meta.env.VITE_API_URL + "/api/products/" + productId, product, {
   headers: {
     Authorization: "Bearer " + token
   }
 })
-toast.success("Product added successfully");
+toast.success("Product updated successfully");
 navigate("/admin/products");
 
 
 }catch{
-  toast.error("Error adding product. Please try again.");
+  toast.error("Error updating product. Please try again.");
 }
 }
 
@@ -67,7 +73,7 @@ navigate("/admin/products");
     <div className="w-full min-h-screen flex justify-center items-center bg-gradient-to-br from-orange-50 to-pink-50 p-6">
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-md p-10 flex flex-col gap-6  ">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-800">Add Product</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">Update Product</h2>
           <p className="text-sm text-gray-500">
             Create a new SKU with clean metadata.
           </p>
@@ -77,6 +83,7 @@ navigate("/admin/products");
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-600">Product ID</label>
             <input
+              disabled
               type="text"
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
@@ -181,8 +188,8 @@ navigate("/admin/products");
           </div>
         </div>
 
-        <button onClick={addProduct} className="w-full py-3 bg-accent/50 text-secondary rounded-xl font-medium ring-1 ring-accent/30  hover:border-accent hover:border-[2px] transition mt-2 cursor-pointer">
-          Add Product
+        <button onClick={updateProduct} className="w-full py-3 bg-accent/50 text-secondary rounded-xl font-medium ring-1 ring-accent/30  hover:border-accent hover:border-[2px] transition mt-2 cursor-pointer">
+          Update Product
         </button>
          <button onClick={() => navigate("/admin/products")} className="w-full py-3 bg-[#FF000050] text-secondary rounded-xl font-medium hover:border-red-500 hover:border-[2px] transition mt-2 cursor-pointer">
           Cancel

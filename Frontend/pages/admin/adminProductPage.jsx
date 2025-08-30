@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, } from "react-router-dom";
 
 export default function AdminProductPage() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -16,6 +17,7 @@ export default function AdminProductPage() {
         setProducts(response.data);
       });
   }, []);
+
 
   return (
     <div className="w-full min-h-full">
@@ -57,12 +59,17 @@ export default function AdminProductPage() {
                   <th className="sticky top-0 z-10 px-4 py-3 text-xs font-semibold uppercase tracking-wide">
                     Labelled Price
                   </th>
+                   <th className="sticky top-0 z-10 px-4 py-3 text-xs font-semibold uppercase tracking-wide">
+                    Stock
+                  </th>
                   <th className="sticky top-0 z-10 px-4 py-3 text-xs font-semibold uppercase tracking-wide">
                     Category
                   </th>
+                 
                   <th className="sticky top-0 z-10 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-center">
                     Actions
                   </th>
+                  
                 </tr>
               </thead>
 
@@ -84,7 +91,7 @@ export default function AdminProductPage() {
                         {item.productID}
                       </td>
                       <td className="px-4 py-3 font-medium text-secondary">
-                        {item.name}
+                        {item.productName}
                       </td>
                       <td className="px-4 py-3 text-secondary/90">
                         <span className="rounded-md bg-secondary/5 px-2 py-1 text-sm">
@@ -96,11 +103,18 @@ export default function AdminProductPage() {
                           LKR {item.labelledPrice}
                         </span>
                       </td>
+                      <td>
+                        <span className="rounded-full bg-accent/10 flex text-center justify-center py-1 text-xs font-medium text-accent">
+                          {item.stock}
+                        </span>
+                      </td>
                       <td className="px-4 py-3">
                         <span className="rounded-full bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent">
                           {item.category}
                         </span>
+
                       </td>
+                      
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-center gap-3">
                           <FaRegTrashCan
@@ -114,6 +128,7 @@ export default function AdminProductPage() {
                             size={36}
                             title="Edit"
                             aria-label="Edit product"
+                            onClick={() => navigate("/admin/update-product" , {state: item})}
                           />
                         </div>
                       </td>

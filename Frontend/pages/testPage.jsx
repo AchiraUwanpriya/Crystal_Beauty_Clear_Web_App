@@ -1,67 +1,34 @@
 import { useState } from "react";
+import mediaUpload from "../src/utils/mediaUpload";
+
+
+
 
 export default function TestPage() {
-  const [count, setCount] = useState(10);
-  const [status, setStatus] = useState("Online");
+const[file,setfile]=useState(null);
 
-  return (
-    <div className="w-full h-full justify-center items-center flex">
-      <div className="w-[500px] h-[500px] bg-amber-100 text-white flex flex-col items-center justify-center gap-[25px] ">
-        <div className="flex items-center justify-center gap-[20px]">
-          <button
-            className="w-[100px] h-[40px] bg-accent rounded-lg text-lg"
-            onClick={() => {
-              setCount(count - 1);
-              console.log("Decreasing....");
-              console.log(count - 1);
-            }}
-          >
-            -
-          </button>
-          <span className="text-accent text-4xl">{count}</span>
 
-          <button
-            className="w-[100px] h-[40px] bg-accent rounded-lg text-lg"
-            onClick={() => {
-              setCount(count + 1);
-              console.log("Increasing....");
-              console.log(count + 1);
-            }}
-          >
-            +
-          </button>
-        </div>
+async function uploadImage(){
+  const link = await mediaUpload(file);
+  console.log(link);
 
-        <div className=" flex flex-col items-center justify-center gap-[20px]">
-          <span className="text-accent text-4xl">{status}</span>
+  
+
+}
+
+    return (
+        <div className="w-full h-full flex items-center justify-center">
+            
+             <input type="file" onChange={
+              (e) => {
+                setfile(e.target.files[0]);
+                
+                  
+              }
+             } />
+
+              <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={uploadImage}>Upload</button>
         </div>
-        <div className="flex items-center justify-center gap-[20px]">
-          <button
-            className=" bg-accent w-[100px] h-[40px] rounded-lg text-lg"
-            onClick={() => {
-              setStatus("Online");
-            }}
-          >
-            Online
-          </button>
-          <button
-            className=" bg-accent w-[100px] h-[40px] rounded-lg text-lg"
-            onClick={() => {
-              setStatus("Offline");
-            }}
-          >
-            Offline
-          </button>
-          <button
-            className=" bg-accent w-[100px] h-[40px] rounded-lg text-lg"
-            onClick={() => {
-              setStatus("Busy");
-            }}
-          >
-            Busy
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
+
 }
