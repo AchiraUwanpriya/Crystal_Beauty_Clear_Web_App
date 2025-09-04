@@ -47,8 +47,10 @@ export async function deleteProduct(req, res) {
   }
   try {
     const productid = req.params.productID;
+   
 
-    if (productid != Product.productID) {
+    const product = await Product.findOne({ productID: productid });
+    if (!product) {
       res.status(404).json({
         message: "Product Not Found",
       });
