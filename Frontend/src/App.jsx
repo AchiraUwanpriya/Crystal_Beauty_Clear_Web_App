@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import ProductCard from "./components/productCard";
 import AdminPage from "../pages/adminPage";
 import HomePage from "../pages/homePage";
 import TestPage from "../pages/testPage";
